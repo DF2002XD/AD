@@ -63,12 +63,15 @@ public class App {
 
             System.out.println("Introduce el nombre del proyecto: ");
             String nombreproy = sc.next();
+            sc.nextLine();
 
             System.out.println("Introduce el lugar del proyecto: ");
             String lugarproy = sc.next();
+            sc.nextLine();
 
             System.out.println("Introduce el numero de departamento: ");
             int numdep = sc.nextInt();
+            sc.nextLine();
 
             Statement smt = db.createStatement();
             int filasAfectadas = smt
@@ -118,4 +121,17 @@ public class App {
             }
         }
     }
+    public static String leerNombre() {
+        while (true) {
+            System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
+            String nombre = sc.nextLine().trim();
+            if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                return nombre;
+            } else {
+                System.out.println("Nombre inválido. Inténtelo de nuevo.");
+            }
+            
+        }
+    }
+
 }
