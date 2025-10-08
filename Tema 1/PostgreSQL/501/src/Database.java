@@ -29,14 +29,14 @@ public class Database {
                 // Ahora conectar de nuevo
                 connection = java.sql.DriverManager.getConnection(url, usuario, clave);
                 Statement smt1 = connection.createStatement();
+                smt1.executeUpdate("CREATE SCHEMA IF NOT EXISTS objetos");
                 smt1.executeUpdate(
                         "CREATE TYPE Autor AS (" +
                                 "nombre_autor VARCHAR, " +
                                 "fecha VARCHAR" +
                                 ")");
-
                 smt1.executeUpdate(
-                        "CREATE TABLE libros (" +
+                        "CREATE TABLE objetos.libros (" +
                                 "id SERIAL PRIMARY KEY, " +
                                 "titulo TEXT, " +
                                 "autor Autor, " +
