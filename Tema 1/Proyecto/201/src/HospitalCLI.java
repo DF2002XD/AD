@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class HospitalCLI {
-    
+
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
@@ -68,8 +68,8 @@ public class HospitalCLI {
     }
 
     private static void anadirEspecialidad() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'anadirEspecialidad'");
+        String nombre = leerNombre();
+        GestorHospital.crearEspecialidad(nombre);
     }
 
     private static void anadirMedico() {
@@ -155,4 +155,16 @@ public class HospitalCLI {
         }
     }
 
+    private static String leerNombre() {
+        while (true) {
+            System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
+            String nombre = sc.nextLine().trim();
+            if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                return nombre;
+            } else {
+                System.out.println("Nombre inválido. Inténtelo de nuevo.");
+            }
+
+        }
+    }
 }
