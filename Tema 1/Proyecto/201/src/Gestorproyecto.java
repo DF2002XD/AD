@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 public class Gestorproyecto {
     private static Connection dbsql = DatabaseSQL.getInstance();
     private static Connection dbpostgre = DatabasePostgre.getInstance();
+    
 
     public boolean berificarNumProyecto(int numproy) {
         if (numproy <= 0) {

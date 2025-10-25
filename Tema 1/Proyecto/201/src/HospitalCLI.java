@@ -1,10 +1,10 @@
-import java.sql.Connection;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class HospitalCLI {
 
     private static Scanner sc = new Scanner(System.in);
+    private static final GestorHospital hospital = new GestorHospital();
 
     public static void main(String[] args) throws Exception {
         int opcion = 0;
@@ -19,7 +19,7 @@ public class HospitalCLI {
                     anadirMedico();
                     break;
                 case 3:
-                    eliminarMedico()
+                    eliminarMedico();
                     break;
                 case 4:
                     // Lógica para crear un nuevo paciente 
@@ -69,7 +69,11 @@ public class HospitalCLI {
 
     private static void anadirEspecialidad() {
         String nombre = leerNombre();
-        GestorHospital.crearEspecialidad(nombre);
+        while (hospital.existeEspecialidad(nombre) == true) {
+            System.out.println("La especialidad ya existe. Introduzca otro nombre:");
+            nombre = leerNombre();  
+        }
+        hospital.crearEspecialidad(nombre);
     }
 
     private static void anadirMedico() {
@@ -158,6 +162,7 @@ public class HospitalCLI {
     private static String leerNombre() {
         while (true) {
             System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
+            sc.nextLine();
             String nombre = sc.nextLine().trim();
             if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
                 return nombre;

@@ -24,6 +24,7 @@ public class DatabaseSQL{
     public static Connection getInstance(){
         if (DatabaseSQL.connection == null) 
             new DatabaseSQL();
+            
         return DatabaseSQL.connection;
     }
 }

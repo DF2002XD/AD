@@ -1,15 +1,18 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 
 public class GestorHospital {
-    private static Connection dbsql = DatabaseSQL.getInstance();
     private static Connection dbpostgre = DatabasePostgre.getInstance();
 
+    public void crearEspecialidad(String nombreEspecialidad) {
+        ejecutarCrearEspecialidad(nombreEspecialidad);
+    }
 
-    private static void crearEspecialidad(String nombreEspecialidad) {
+    private static void ejecutarCrearEspecialidad(String nombreEspecialidad) {
         try {
-            String sql = "INSERT INTO hospital.especialidad (nombre_especialidad) VALUES (?)";
+            String sql = "INSERT INTO hospital.especialidades (nombre_especialidad) VALUES (?)";
             PreparedStatement psmt = dbpostgre.prepareStatement(sql);
             psmt.setString(1, nombreEspecialidad);
             int filasInsertadas = psmt.executeUpdate();
@@ -20,7 +23,7 @@ public class GestorHospital {
             }
             psmt.close();
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -70,4 +73,26 @@ public class GestorHospital {
         // Lógica para obtener todos los pacientes que han recibido un tratamiento de
         // una especialidad
     }
+
+    public boolean existeEspecialidad(String nombre) {
+        try {
+            String sql = "SELECT COUNT(*) AS count FROM hospital.especialidades WHERE nombre_especialidad = ?";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setString(1, nombre);
+            ResultSet rset = psmt.executeQuery();
+            if (rset.next()) {
+                int count = rset.getInt("count");
+                rset.close();
+                psmt.close();
+                return count > 0;
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    
 }
