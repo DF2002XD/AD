@@ -4,13 +4,10 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 
 public class GestorHospital {
+    private static Connection dbmysql = DatabaseSQL.getInstance();
     private static Connection dbpostgre = DatabasePostgre.getInstance();
 
     public void crearEspecialidad(String nombreEspecialidad) {
-        ejecutarCrearEspecialidad(nombreEspecialidad);
-    }
-
-    private static void ejecutarCrearEspecialidad(String nombreEspecialidad) {
         try {
             String sql = "INSERT INTO hospital.especialidades (nombre_especialidad) VALUES (?)";
             PreparedStatement psmt = dbpostgre.prepareStatement(sql);
@@ -27,49 +24,68 @@ public class GestorHospital {
         }
     }
 
-    private static void crearMedico(String nombreMedico, String nif, int telefono, String email) {
-        // Lógica para crear un nuevo médico
+    public void crearMedico(String nombreMedico, String nif, int telefono, String email) {
+        try {
+            String sql = "INSERT INTO hospilat.medicos (nonmbre_medico, contacto) values (?,ROW(?,?,?,?))";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setString(1, "Dr. " + nombreMedico);
+            psmt.setString(2, nif);
+            psmt.setString(3, nombreMedico);
+            psmt.setInt(4, telefono);
+            psmt.setString(5, email);
+
+            int filasInsertadas = psmt.executeUpdate();
+            if (filasInsertadas > 0) {
+                System.out.println("Medico añadido correctamente.");
+            } else {
+                System.out.println("No se pudo añadir el medico.");
+            }
+            psmt.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void eliminarMedico(int id) {
+    public void eliminarMedico(int id) {
         // Lógica para eliminar un médico por ID
     }
 
-    private static void crearPaciente(String nombre, String email, LocalDate fechaNacimiento) {
+    public void crearPaciente(String nombre, String email, LocalDate fechaNacimiento) {
         // Lógica para crear un nuevo paciente
     }
 
-    private static void eliminarPaciente(int id) {
+    public void eliminarPaciente(int id) {
         // Lógica para eliminar un paciente por ID
     }
 
-    private static void crearTratamiento(String nombre, String descripcion, String nombreEspecialidad,
+    public void crearTratamiento(String nombre, String descripcion, String nombreEspecialidad,
             String nifMedico) {
         // Lógica para crear un nuevo tratamiento
     }
 
-    private static void eliminarTratamientoPorNombre(String nombre) {
+    public void eliminarTratamientoPorNombre(String nombre) {
         // Lógica para eliminar un tratamiento por su nombre
     }
 
-    private static void listarTratamientosConPocosPacientes(int cantidad) {
+    public void listarTratamientosConPocosPacientes(int cantidad) {
         // Lógica para listar tratamientos con menos de 'cantidad' pacientes
     }
 
-    private static void obtenerTotalCitasPorPaciente() {
+    public void obtenerTotalCitasPorPaciente() {
         // Lógica para obtener el total de citas realizadas por cada paciente
     }
 
-    private static void obtenerCantidadTratamientosPorSala() {
+    public void obtenerCantidadTratamientosPorSala() {
         // Lógica para obtener la cantidad de tratamientos por sala
     }
 
-    private static void listarTratamientosConEspecialidadYMedico() {
+    public void listarTratamientosConEspecialidadYMedico() {
         // Lógica para listar todos los tratamientos con sus respectivas especialidades
         // y médicos
     }
 
-    private static void obtenerPacientesPorEspecialidad(int idEspecialidad) {
+    public void obtenerPacientesPorEspecialidad(int idEspecialidad) {
         // Lógica para obtener todos los pacientes que han recibido un tratamiento de
         // una especialidad
     }

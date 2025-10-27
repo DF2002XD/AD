@@ -1,6 +1,8 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 public class HospitalCLI {
 
     private static Scanner sc = new Scanner(System.in);
@@ -22,7 +24,7 @@ public class HospitalCLI {
                     eliminarMedico();
                     break;
                 case 4:
-                    // Lógica para crear un nuevo paciente 
+                    // Lógica para crear un nuevo paciente
                     anadirPaciente();
                     break;
                 case 5:
@@ -50,11 +52,13 @@ public class HospitalCLI {
                     obrCantTrataXSala();
                     break;
                 case 11:
-                    // Lógica para listar todos los tratamientos con sus respectivas especialidades y médicos
+                    // Lógica para listar todos los tratamientos con sus respectivas especialidades
+                    // y médicos
                     listarTrataConEspeYMed();
                     break;
                 case 12:
-                    // Lógica para obtener todos los pacientes que han recibido un tratamiento de una especialidad
+                    // Lógica para obtener todos los pacientes que han recibido un tratamiento de
+                    // una especialidad
                     obPaciXEspe();
                     break;
                 case 0:
@@ -68,15 +72,25 @@ public class HospitalCLI {
     }
 
     private static void anadirEspecialidad() {
+
+        boolean salir = leerBooleano("¿Desea salir sin añadir una especialidad?");
+
+        if (salir){
+            return;
+        }
+
         String nombre = leerNombre();
-        while (hospital.existeEspecialidad(nombre) == true) {
+        while (hospital.existeEspecialidad(nombre)) {
             System.out.println("La especialidad ya existe. Introduzca otro nombre:");
-            nombre = leerNombre();  
+            nombre = leerNombre();
         }
         hospital.crearEspecialidad(nombre);
     }
 
     private static void anadirMedico() {
+        String nombreMedico = leerNombre();
+        String dniMedico = leerDni();
+
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'anadirMedico'");
     }
@@ -162,7 +176,7 @@ public class HospitalCLI {
     private static String leerNombre() {
         while (true) {
             System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
-            sc.nextLine();
+
             String nombre = sc.nextLine().trim();
             if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
                 return nombre;
@@ -171,5 +185,53 @@ public class HospitalCLI {
             }
 
         }
+    }
+
+    public static String leerDni() {
+        String dni;
+        do {
+            System.out.println("Introduzca su DNI (8 números + 1 letra):");
+            dni = sc.nextLine().trim();
+        } while (!validarDni(dni));
+        return dni;
+    }
+
+    private static boolean validarDni(String dni) {
+        if (!dni.matches("[0-9]{8}[A-Z]"))
+            return false;
+
+        // Cálculo de la letra correcta del DNI
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        int numero = Integer.parseInt(dni.substring(0, 8));
+        char letraCorrecta = letras.charAt(numero % 23);
+        return dni.charAt(8) == letraCorrecta;
+    }
+
+    public static String leerTelefono() {
+        String telefono;
+        do {
+            System.out.println("Introduzca su número de teléfono (puede incluir código de país):");
+            telefono = sc.nextLine().trim();
+        } while (!validarTelefono(telefono));
+        return telefono;
+    }
+
+    private static boolean validarTelefono(String telefono) {
+        // Expresión regular para teléfonos nacionales e internacionales
+        return telefono.matches("\\+?[0-9]{1,3}[ -]?\\d{9}") || telefono.matches("\\d{9}");
+    }
+
+    public static boolean leerBooleano(String mensaje) {
+        System.out.println(mensaje + " (true/false): ");
+        System.out.println("S|s o N|n");
+        sc.nextLine();
+        String input = sc.nextLine().trim().toLowerCase();
+
+        while (!input.equalsIgnoreCase("S") && !input.equalsIgnoreCase("N")) {
+            System.out.println("Introduzca S o N correctamente.");
+            input = sc.nextLine().trim().toLowerCase();
+        }
+
+        return Boolean.parseBoolean(input);
     }
 }
