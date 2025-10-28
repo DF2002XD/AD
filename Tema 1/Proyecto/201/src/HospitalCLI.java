@@ -1,7 +1,6 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
 
 public class HospitalCLI {
 
@@ -13,6 +12,7 @@ public class HospitalCLI {
         do {
             mostrarMenu();
             opcion = leerEntero("Seleccione una opción (0 para salir): ");
+            sc.nextLine();
             switch (opcion) {
                 case 1:
                     anadirEspecialidad();
@@ -75,9 +75,8 @@ public class HospitalCLI {
 
         boolean salir = leerBooleano("¿Desea salir sin añadir una especialidad?");
 
-        if (salir){
-            return;
-        }
+        if (salir) return;
+        
 
         String nombre = leerNombre();
         while (hospital.existeEspecialidad(nombre)) {
@@ -90,14 +89,23 @@ public class HospitalCLI {
     private static void anadirMedico() {
         String nombreMedico = leerNombre();
         String dniMedico = leerDni();
-
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'anadirMedico'");
+        while (hospital.existeNif(dniMedico)) {
+            System.out.println("El DNI ya existe. Introduzca otro DNI");
+            dniMedico = leerDni();
+        }
+        int telefonoMedico = leerTelefono();
+        String emailMedico = leerEmail();
+            hospital.crearMedico(nombreMedico, dniMedico, telefonoMedico, emailMedico);
     }
 
     private static void eliminarMedico() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarMedico'");
+        hospital.listarMedicos();
+        int idMedico = leerEntero("Introduzca el ID del médico a eliminar: ");
+        while (!hospital.existeIdMedico(idMedico)) {
+            System.out.println("El ID del médico no existe. Introduzca otro ID:");
+            idMedico = leerEntero("Introduzca el ID del médico a eliminar: ");
+        }
+        hospital.eliminarMedico(idMedico);
     }
 
     private static void anadirPaciente() {
@@ -176,7 +184,6 @@ public class HospitalCLI {
     private static String leerNombre() {
         while (true) {
             System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
-
             String nombre = sc.nextLine().trim();
             if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
                 return nombre;
@@ -188,42 +195,58 @@ public class HospitalCLI {
     }
 
     public static String leerDni() {
-        String dni;
-        do {
-            System.out.println("Introduzca su DNI (8 números + 1 letra):");
-            dni = sc.nextLine().trim();
-        } while (!validarDni(dni));
-        return dni;
+    String dni;
+    boolean valido = false;
+
+    do {
+        System.out.print("Introduzca los 8 dígitos del DNI: ");
+        dni = sc.nextLine().trim();
+
+        if (validarSoloNumeros(dni)) {
+            valido = true;
+        } else {
+            System.out.println("⚠ El DNI debe tener exactamente 8 números. Intente de nuevo.");
+        }
+    } while (!valido);
+
+    return agregarLetra(dni);
+}
+
+private static boolean validarSoloNumeros(String dni) {
+    return dni.matches("\\d{8}");
+}
+
+private static String agregarLetra(String dni) {
+    String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+    int numero = Integer.parseInt(dni);
+    int resto = numero % 23;
+    char letraCorrecta = letras.charAt(resto);
+    return dni + letraCorrecta;
+}
+
+    public static int leerTelefono() {
+    int telefono = -1;
+    boolean valido = false;
+
+    while (!valido) {
+        System.out.print("Introduzca su número de teléfono (solo números): ");
+        String input = sc.next().trim();
+
+        if (input.matches("\\d{9}")) { 
+            try {
+                telefono = Integer.parseInt(input);
+                valido = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Número demasiado grande, int no lo puede manejar.");
+            }
+        } else {
+            System.out.println("El teléfono debe contener exactamente 9 dígitos. Intente de nuevo.");
+        }
     }
-
-    private static boolean validarDni(String dni) {
-        if (!dni.matches("[0-9]{8}[A-Z]"))
-            return false;
-
-        // Cálculo de la letra correcta del DNI
-        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-        int numero = Integer.parseInt(dni.substring(0, 8));
-        char letraCorrecta = letras.charAt(numero % 23);
-        return dni.charAt(8) == letraCorrecta;
-    }
-
-    public static String leerTelefono() {
-        String telefono;
-        do {
-            System.out.println("Introduzca su número de teléfono (puede incluir código de país):");
-            telefono = sc.nextLine().trim();
-        } while (!validarTelefono(telefono));
-        return telefono;
-    }
-
-    private static boolean validarTelefono(String telefono) {
-        // Expresión regular para teléfonos nacionales e internacionales
-        return telefono.matches("\\+?[0-9]{1,3}[ -]?\\d{9}") || telefono.matches("\\d{9}");
-    }
-
+    return telefono;
+}
     public static boolean leerBooleano(String mensaje) {
-        System.out.println(mensaje + " (true/false): ");
-        System.out.println("S|s o N|n");
+        System.out.println(mensaje + " (s/n): ");
         sc.nextLine();
         String input = sc.nextLine().trim().toLowerCase();
 
@@ -232,6 +255,20 @@ public class HospitalCLI {
             input = sc.nextLine().trim().toLowerCase();
         }
 
-        return Boolean.parseBoolean(input);
+        return input.equalsIgnoreCase("S");
+    }
+
+    public static String leerEmail() {
+        while (true) {
+            sc.nextLine();
+            System.out.println("Introduzca su correo electrónico:");
+            String email = sc.nextLine().trim();
+            if (email.matches("^[\\w.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                return email;
+            } else {
+                System.out.println("Correo electrónico inválido. Inténtelo de nuevo.");
+            }
+            
+        }
     }
 }

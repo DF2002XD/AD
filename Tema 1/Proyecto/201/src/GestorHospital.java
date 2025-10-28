@@ -26,7 +26,8 @@ public class GestorHospital {
 
     public void crearMedico(String nombreMedico, String nif, int telefono, String email) {
         try {
-            String sql = "INSERT INTO hospilat.medicos (nonmbre_medico, contacto) values (?,ROW(?,?,?,?))";
+            
+            String sql = "INSERT INTO hospital.medicos (nombre_medico, contacto) values (?,ROW(?,?,?,?))";
             PreparedStatement psmt = dbpostgre.prepareStatement(sql);
             psmt.setString(1, "Dr. " + nombreMedico);
             psmt.setString(2, nif);
@@ -48,7 +49,21 @@ public class GestorHospital {
     }
 
     public void eliminarMedico(int id) {
-        // Lógica para eliminar un médico por ID
+        try {
+            String sql = "DELETE FROM hospital.medicos WHERE id_medico = ?";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setInt(1, id);
+
+            int filasEliminadas = psmt.executeUpdate();
+            if (filasEliminadas > 0) {
+                System.out.println("Médico eliminado correctamente.");
+            } else {
+                System.out.println("No se pudo eliminar el médico. Verifique el ID proporcionado.");
+            }
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void crearPaciente(String nombre, String email, LocalDate fechaNacimiento) {
@@ -107,6 +122,64 @@ public class GestorHospital {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public void listarMedicos() {
+       try {
+            String sql = "SELECT id_medico, nombre_medico FROM hospital.medicos";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            ResultSet rset = psmt.executeQuery();
+            System.out.println("Lista de Médicos:");
+            while (rset.next()) {
+                int id = rset.getInt("id_medico");
+                String nombre = rset.getString("nombre_medico");
+                System.out.println("ID: " + id + ", Nombre: " + nombre);
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean existeNif(String dniMedico) {
+         try {
+            String sql = "SELECT COUNT(*) AS count FROM hospital.medicos WHERE (contacto).nif = ?";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setString(1, dniMedico);
+            ResultSet rset = psmt.executeQuery();
+            if (rset.next()) {
+                int count = rset.getInt("count");
+                rset.close();
+                psmt.close();
+                return count > 0;
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean existeIdMedico(int idMedico) {
+        try {
+           String sql = "SELECT COUNT(*) AS count FROM hospital.medicos WHERE id_medico = ?";
+           PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+           psmt.setInt(1, idMedico);
+           ResultSet rset = psmt.executeQuery();
+           if (rset.next()) {
+               int count = rset.getInt("count");
+               rset.close();
+               psmt.close();
+               return count > 0;
+           }
+           rset.close();
+           psmt.close();
+         } catch (Exception e) {
+           e.printStackTrace();
+         }
         return false;
     }
 
