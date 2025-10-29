@@ -79,10 +79,12 @@ public class HospitalCLI {
         if (salir)
             return;
 
-        String nombre = leerNombre("Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
+        String nombre = leerNombre(
+                "Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
         while (hospital.existeEspecialidad(nombre)) {
             System.out.println("La especialidad ya existe. Introduzca otro nombre:");
-            nombre = leerNombre("Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
+            nombre = leerNombre(
+                    "Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
         }
         hospital.crearEspecialidad(nombre);
     }
@@ -92,7 +94,8 @@ public class HospitalCLI {
 
         if (salir)
             return;
-        String nombreMedico = leerNombre("Introduzca el nombre del medico (mínimo 3 caracteres, solo letras y espacios):");
+        String nombreMedico = leerNombre(
+                "Introduzca el nombre del medico (mínimo 3 caracteres, solo letras y espacios):");
         String dniMedico = leerDni();
         while (hospital.existeNif(dniMedico)) {
             System.out.println("El DNI ya existe. Introduzca otro DNI");
@@ -119,7 +122,8 @@ public class HospitalCLI {
 
     private static void anadirPaciente() {
         boolean salir = leerBooleano("¿Desea salir sin añadir un Paciente?");
-        if (salir)return;
+        if (salir)
+            return;
         String nombre = leerNombre("Introduzca el nombre del paciente (mínimo 3 caracteres, solo letras y espacios):");
         String email = leerEmail();
         LocalDate fechaNacimiento = leerFechaNacimiento();
@@ -142,27 +146,30 @@ public class HospitalCLI {
 
     private static void anadirTratamiento() {
         String nombreTratamiento = leerNombre("Introduzca el nombre del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
-        String descripcionTratamiento = leerNombre("Introduzca la descripción del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
-        System.out.println("Especialidad asociada al tratamiento: ");
+        String descripcionTratamiento = leerNombre( "Introduzca la descripción del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
+
         hospital.listarEspecialidades();
         int idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
         while (!hospital.existeIdEspecialidad(idEspecialidad)) {
             System.out.println("El ID de la especialidad no existe. Introduzca otro ID:");
             idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
         }
-        System.out.println("Medico asociado al tratamiento: ");
+        String nombreEspecialidad = hospital.obtenerNombrePorIdEspecialidad(idEspecialidad);
+
         hospital.listarMedicosNif();
         int idMedico = leerEntero("Introduzca el ID del médico asociado al tratamiento: ");
         while (!hospital.existeIdMedico(idMedico)) {
             System.out.println("El ID del médico no existe. Introduzca otro ID:");
             idMedico = leerEntero("Introduzca el ID del médico asociado al tratamiento: ");
         }
-        hospital.crearTratamiento(nombreTratamiento, descripcionTratamiento, idEspecialidad, idMedico);
+        String nifMedico = hospital.obtenerNifPorIdMedico(idMedico);
+
+        hospital.crearTratamiento(nombreTratamiento, descripcionTratamiento, nombreEspecialidad, nifMedico);
     }
 
     private static void eliminarTratamiento() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarTratamiento'");
+        String tratamiento = leerNombre("\"Introduzca el nombre del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
+        hospital.eliminarTratamientoPorNombre(tratamiento);
     }
 
     private static void listarTratamientos() {

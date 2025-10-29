@@ -105,15 +105,79 @@ public class GestorHospital {
 
     public void crearTratamiento(String nombre, String descripcion, String nombreEspecialidad, String nifMedico) {
         try {
-            String sql = "INSERT INTO hospital.tratamientos ()";
-           
-            psmt.close();
+            String sqlIdEsp = "SELECT id_especialidad FROM hospital.especialidades WHERE nombre_especialidad = ?";
+            PreparedStatement psmtIdEsp = dbpostgre.prepareStatement(sqlIdEsp);
+            psmtIdEsp.setString(1, nombreEspecialidad);
+            ResultSet rsetIdEsp = psmtIdEsp.executeQuery();
+
+            int idEspecialidad = -1;
+            if (rsetIdEsp.next()) {
+                idEspecialidad = rsetIdEsp.getInt("id_especialidad");
+            } else {
+                System.out.println("No se encontró la especialidad con nombre: " + nombreEspecialidad);
+                return;
+            }
+            rsetIdEsp.close();
+            psmtIdEsp.close();
+
+            String sqlIdMed = "SELECT id_medico FROM hospital.medicos WHERE (contacto).nif = ?";
+            PreparedStatement psmtIdMed = dbpostgre.prepareStatement(sqlIdMed);
+            psmtIdMed.setString(1, nifMedico);
+            ResultSet rsetIdMed = psmtIdMed.executeQuery();
+
+            int idMedico = -1;
+            if (rsetIdMed.next()) {
+                idMedico = rsetIdMed.getInt("id_medico");
+            } else {
+                System.out.println("No se encontró el médico con NIF: " + nifMedico);
+                return;
+            }
+            rsetIdMed.close();
+            psmtIdMed.close();
+
+            String sqlMySQL = "INSERT INTO tratamientos (nombre_tratamiento, descripcion) VALUES (?, ?)";
+            PreparedStatement psmtMySQL = dbmysql.prepareStatement(sqlMySQL, PreparedStatement.RETURN_GENERATED_KEYS);
+            psmtMySQL.setString(1, nombre);
+            psmtMySQL.setString(2, descripcion);
+            psmtMySQL.executeUpdate();
+
+            ResultSet rsetMySQL = psmtMySQL.getGeneratedKeys();
+            int idTratamiento = -1;
+            if (rsetMySQL.next()) {
+                idTratamiento = rsetMySQL.getInt(1);
+            } else {
+                System.out.println("No se pudo obtener el ID generado en MySQL.");
+                return;
+            }
+            rsetMySQL.close();
+            psmtMySQL.close();
+
+            String sqlPostgre = "INSERT INTO hospital.tratamientos (id_tratamiento, id_medico, id_especialidad) VALUES (?, ?, ?)";
+            PreparedStatement psmtPost = dbpostgre.prepareStatement(sqlPostgre);
+            psmtPost.setInt(1, idTratamiento);
+            psmtPost.setInt(2, idMedico);
+            psmtPost.setInt(3, idEspecialidad);
+
+            int filasInsertadas = psmtPost.executeUpdate();
+            psmtPost.close();
+
+            if (filasInsertadas > 0) {
+                System.out
+                        .println("Tratamiento añadido correctamente en ambas bases de datos con ID: " + idTratamiento);
+            } else {
+                System.out.println("Insertado en MySQL pero falló en PostgreSQL.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        }
     }
 
     public void eliminarTratamientoPorNombre(String nombre) {
-        // Lógica para eliminar un tratamiento por su nombre
+        try {
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void listarTratamientosConPocosPacientes(int cantidad) {
@@ -256,6 +320,24 @@ public class GestorHospital {
 
     public void listarEspecialidades() {
         try {
+            String sql = "SELECT id_especialidad, nombre_especialidad FROM hospital.especialidades";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            ResultSet rset = psmt.executeQuery();
+            System.out.println("Lista de Especialidades:");
+            while (rset.next()) {
+                int id = rset.getInt("id_especialidad");
+                String nombre = rset.getString("nombre_especialidad");
+                System.out.println("ID: " + id + ", Nombre: " + nombre);
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listarMedicosNif() {
+        try {
             String sql = "SELECT id_medico, nombre_medico, (contacto).nif FROM hospital.medicos";
             PreparedStatement psmt = dbpostgre.prepareStatement(sql);
             ResultSet rset = psmt.executeQuery();
@@ -271,11 +353,6 @@ public class GestorHospital {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void listarMedicosNif() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarMedicosNif'");
     }
 
     public boolean existeIdEspecialidad(int idEspecialidad) {
@@ -296,6 +373,46 @@ public class GestorHospital {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String obtenerNombrePorIdEspecialidad(int idEspecialidad) {
+        try {
+            String sql = "SELECT nombre_especialidad FROM hospital.especialidades WHERE id_especialidad = ?";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setInt(1, idEspecialidad);
+            ResultSet rset = psmt.executeQuery();
+            if (rset.next()) {
+                String nombre = rset.getString("nombre_especialidad");
+                rset.close();
+                psmt.close();
+                return nombre;
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String obtenerNifPorIdMedico(int idMedico) {
+        try {
+            String sql = "SELECT (contacto).nif FROM hospital.medicos WHERE id_medico = ?";
+            PreparedStatement psmt = dbpostgre.prepareStatement(sql);
+            psmt.setInt(1, idMedico);
+            ResultSet rset = psmt.executeQuery();
+            if (rset.next()) {
+                String nif = rset.getString("nif");
+                rset.close();
+                psmt.close();
+                return nif;
+            }
+            rset.close();
+            psmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
