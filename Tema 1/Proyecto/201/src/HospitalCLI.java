@@ -1,6 +1,7 @@
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 
 public class HospitalCLI {
 
@@ -75,19 +76,23 @@ public class HospitalCLI {
 
         boolean salir = leerBooleano("¿Desea salir sin añadir una especialidad?");
 
-        if (salir) return;
-        
+        if (salir)
+            return;
 
-        String nombre = leerNombre();
+        String nombre = leerNombre("Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
         while (hospital.existeEspecialidad(nombre)) {
             System.out.println("La especialidad ya existe. Introduzca otro nombre:");
-            nombre = leerNombre();
+            nombre = leerNombre("Introduzca el nombre de la especialidad (mínimo 3 caracteres, solo letras y espacios):");
         }
         hospital.crearEspecialidad(nombre);
     }
 
     private static void anadirMedico() {
-        String nombreMedico = leerNombre();
+        boolean salir = leerBooleano("¿Desea salir sin añadir un Medico?");
+
+        if (salir)
+            return;
+        String nombreMedico = leerNombre("Introduzca el nombre del medico (mínimo 3 caracteres, solo letras y espacios):");
         String dniMedico = leerDni();
         while (hospital.existeNif(dniMedico)) {
             System.out.println("El DNI ya existe. Introduzca otro DNI");
@@ -95,10 +100,14 @@ public class HospitalCLI {
         }
         int telefonoMedico = leerTelefono();
         String emailMedico = leerEmail();
-            hospital.crearMedico(nombreMedico, dniMedico, telefonoMedico, emailMedico);
+        hospital.crearMedico(nombreMedico, dniMedico, telefonoMedico, emailMedico);
     }
 
     private static void eliminarMedico() {
+        boolean salir = leerBooleano("¿Desea salir sin eleminar un Medico?");
+
+        if (salir)
+            return;
         hospital.listarMedicos();
         int idMedico = leerEntero("Introduzca el ID del médico a eliminar: ");
         while (!hospital.existeIdMedico(idMedico)) {
@@ -109,18 +118,46 @@ public class HospitalCLI {
     }
 
     private static void anadirPaciente() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'anadirPaciente'");
+        boolean salir = leerBooleano("¿Desea salir sin añadir un Paciente?");
+        if (salir)return;
+        String nombre = leerNombre("Introduzca el nombre del paciente (mínimo 3 caracteres, solo letras y espacios):");
+        String email = leerEmail();
+        LocalDate fechaNacimiento = leerFechaNacimiento();
+        hospital.crearPaciente(nombre, email, fechaNacimiento);
     }
 
     private static void eliminarPaciente() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarPaciente'");
+        boolean salir = leerBooleano("¿Desea salir sin eleminar un Paciente?");
+
+        if (salir)
+            return;
+        hospital.listarPacientes();
+        int idPaciente = leerEntero("Introduzca el ID del paciente a eliminar: ");
+        while (!hospital.existeIdPaciente(idPaciente)) {
+            System.out.println("El ID del médico no existe. Introduzca otro ID:");
+            idPaciente = leerEntero("Introduzca el ID del médico a eliminar: ");
+        }
+        hospital.eliminarPaciente(idPaciente);
     }
 
     private static void anadirTratamiento() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'anadirTratamiento'");
+        String nombreTratamiento = leerNombre("Introduzca el nombre del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
+        String descripcionTratamiento = leerNombre("Introduzca la descripción del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
+        System.out.println("Especialidad asociada al tratamiento: ");
+        hospital.listarEspecialidades();
+        int idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
+        while (!hospital.existeIdEspecialidad(idEspecialidad)) {
+            System.out.println("El ID de la especialidad no existe. Introduzca otro ID:");
+            idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
+        }
+        System.out.println("Medico asociado al tratamiento: ");
+        hospital.listarMedicosNif();
+        int idMedico = leerEntero("Introduzca el ID del médico asociado al tratamiento: ");
+        while (!hospital.existeIdMedico(idMedico)) {
+            System.out.println("El ID del médico no existe. Introduzca otro ID:");
+            idMedico = leerEntero("Introduzca el ID del médico asociado al tratamiento: ");
+        }
+        hospital.crearTratamiento(nombreTratamiento, descripcionTratamiento, idEspecialidad, idMedico);
     }
 
     private static void eliminarTratamiento() {
@@ -181,80 +218,73 @@ public class HospitalCLI {
         }
     }
 
-    private static String leerNombre() {
+    private static String leerNombre(String mensaje) {
         while (true) {
-            System.out.println("Introduzca su nombre (mínimo 3 caracteres, solo letras y espacios):");
+            System.out.println(mensaje);
             String nombre = sc.nextLine().trim();
             if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
                 return nombre;
             } else {
                 System.out.println("Nombre inválido. Inténtelo de nuevo.");
             }
-
         }
     }
 
     public static String leerDni() {
-    String dni;
-    boolean valido = false;
+        String dni;
+        boolean valido = false;
+        do {
+            System.out.print("Introduzca los 8 dígitos del DNI: ");
+            dni = sc.nextLine().trim();
 
-    do {
-        System.out.print("Introduzca los 8 dígitos del DNI: ");
-        dni = sc.nextLine().trim();
+            if (validarSoloNumeros(dni)) {
+                valido = true;
+            } else {
+                System.out.println("⚠ El DNI debe tener exactamente 8 números. Intente de nuevo.");
+            }
+        } while (!valido);
+        return agregarLetra(dni);
+    }
 
-        if (validarSoloNumeros(dni)) {
-            valido = true;
-        } else {
-            System.out.println("⚠ El DNI debe tener exactamente 8 números. Intente de nuevo.");
-        }
-    } while (!valido);
+    private static boolean validarSoloNumeros(String dni) {
+        return dni.matches("\\d{8}");
+    }
 
-    return agregarLetra(dni);
-}
-
-private static boolean validarSoloNumeros(String dni) {
-    return dni.matches("\\d{8}");
-}
-
-private static String agregarLetra(String dni) {
-    String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-    int numero = Integer.parseInt(dni);
-    int resto = numero % 23;
-    char letraCorrecta = letras.charAt(resto);
-    return dni + letraCorrecta;
-}
+    private static String agregarLetra(String dni) {
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        int numero = Integer.parseInt(dni);
+        int resto = numero % 23;
+        char letraCorrecta = letras.charAt(resto);
+        return dni + letraCorrecta;
+    }
 
     public static int leerTelefono() {
-    int telefono = -1;
-    boolean valido = false;
-
-    while (!valido) {
-        System.out.print("Introduzca su número de teléfono (solo números): ");
-        String input = sc.next().trim();
-
-        if (input.matches("\\d{9}")) { 
-            try {
-                telefono = Integer.parseInt(input);
-                valido = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Número demasiado grande, int no lo puede manejar.");
+        int telefono = -1;
+        boolean valido = false;
+        while (!valido) {
+            System.out.print("Introduzca su número de teléfono (solo números): ");
+            String input = sc.next().trim();
+            if (input.matches("\\d{9}")) {
+                try {
+                    telefono = Integer.parseInt(input);
+                    valido = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Número demasiado grande, int no lo puede manejar.");
+                }
+            } else {
+                System.out.println("El teléfono debe contener exactamente 9 dígitos. Intente de nuevo.");
             }
-        } else {
-            System.out.println("El teléfono debe contener exactamente 9 dígitos. Intente de nuevo.");
         }
+        return telefono;
     }
-    return telefono;
-}
+
     public static boolean leerBooleano(String mensaje) {
         System.out.println(mensaje + " (s/n): ");
-        sc.nextLine();
         String input = sc.nextLine().trim().toLowerCase();
-
         while (!input.equalsIgnoreCase("S") && !input.equalsIgnoreCase("N")) {
             System.out.println("Introduzca S o N correctamente.");
             input = sc.nextLine().trim().toLowerCase();
         }
-
         return input.equalsIgnoreCase("S");
     }
 
@@ -268,7 +298,22 @@ private static String agregarLetra(String dni) {
             } else {
                 System.out.println("Correo electrónico inválido. Inténtelo de nuevo.");
             }
-            
+        }
+    }
+
+    public static LocalDate leerFechaNacimiento() {
+        while (true) {
+            try {
+                System.out.print("Introduzca la fecha de nacimiento (YYYY/MM/DD): ");
+                String fechaInput = sc.nextLine().trim();
+                String[] partes = fechaInput.split("/");
+                int anio = Integer.parseInt(partes[0]);
+                int mes = Integer.parseInt(partes[1]);
+                int dia = Integer.parseInt(partes[2]);
+                return LocalDate.of(anio, mes, dia);
+            } catch (Exception e) {
+                System.out.println("Fecha inválida. Inténtelo de nuevo.");
+            }
         }
     }
 }
