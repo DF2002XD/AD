@@ -168,33 +168,36 @@ public class HospitalCLI {
     }
 
     private static void eliminarTratamiento() {
-        String tratamiento = leerNombre("\"Introduzca el nombre del tratamiento (mínimo 3 caracteres, solo letras y espacios):");
+        hospital.listarTratamientos();
+        String tratamiento = leerNombre("\"Introduzca el nombre del tratamiento (mínimo 3 caracteres, solo letras y espacios): ");
         hospital.eliminarTratamientoPorNombre(tratamiento);
     }
 
     private static void listarTratamientos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarTratamientos'");
+        int cantidad = leerEntero("Introduce menos de cantidad pacientes asignados: ");
+        hospital.listarTratamientosConPocosPacientes(cantidad);
     }
 
     private static void obTotalCitXPaci() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obTotalCitXPaci'");
+        hospital.obtenerTotalCitasPorPaciente();
     }
 
     private static void obrCantTrataXSala() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obrCantTrataXSala'");
+        hospital.obtenerCantidadTratamientosPorSala();
     }
 
     private static void listarTrataConEspeYMed() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarTrataConEspeYMed'");
+        hospital.listarTratamientosConEspecialidadYMedico();
     }
 
     private static void obPaciXEspe() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obPaciXEspe'");
+        hospital.listarEspecialidades();
+        int idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
+        while (!hospital.existeIdEspecialidad(idEspecialidad)) {
+            System.out.println("El ID de la especialidad no existe. Introduzca otro ID:");
+            idEspecialidad = leerEntero("Introduzca el ID de la especialidad asociada al tratamiento: ");
+        }
+        hospital.obtenerPacientesPorEspecialidad(idEspecialidad);
     }
 
     private static void mostrarMenu() {
