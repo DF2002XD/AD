@@ -8,11 +8,13 @@ import com.example.HibernateUtil;
 
 public class EmpRep implements Repositorio<Emp> {
     private static Session session = HibernateUtil.get().openSession();
-    Transaction tx = null;
+    
 
     @Override
     public void guardar(Emp t) {
+        Transaction tx = null;
         try {
+            
             tx = session.beginTransaction();
             session.persist(t);
             tx.commit();

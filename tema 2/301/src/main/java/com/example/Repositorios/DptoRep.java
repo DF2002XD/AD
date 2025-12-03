@@ -7,10 +7,11 @@ import com.example.HibernateUtil;
 
 public class DptoRep implements Repositorio<Dpto> {
     private static Session session = HibernateUtil.get().openSession();
-    Transaction tx = null;
+    
 
     @Override
     public void guardar(Dpto t) {
+        Transaction tx = null;
         try {
             tx = session.beginTransaction();
             session.persist(t);
