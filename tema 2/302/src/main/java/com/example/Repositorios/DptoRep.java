@@ -1,11 +1,7 @@
 package com.example.Repositorios;
 
 import com.example.Entidades.Dpto;
-
-import java.util.List;
-
-import javax.management.Query;
-
+import com.example.Entidades.Emp;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.example.HibernateUtil;
@@ -26,19 +22,25 @@ public class DptoRep implements Repositorio<Dpto> {
                 tx.rollback();
                 throw e;
             }
-        } finally {
-            session.close();
         }
     }
 
-
     public void visualizarDepartamento(int id) {
         try {
-            Dpto dpto =(Dpto) session.createQuery("FROM Dpto d where id=:id", Dpto.class);
-            
+           Dpto dpto = session.createQuery("FROM Dpto d WHERE id = :id", Dpto.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            System.out.println(dpto);
+
+            /*Query<Emp> query = session.createQuery("FROM Emp WHERE dptoElement.id = :dptoId", Emp.class);
+            query.setParameter("dptoId", id);
+        
+            List<Emp> empleados = query.getResultList();*/
+            for (Emp emp : dpto.getEmp()) {
+                System.out.println(emp);
+            }
         } catch (Exception e) {
             throw e;
         }
     }
-
 }

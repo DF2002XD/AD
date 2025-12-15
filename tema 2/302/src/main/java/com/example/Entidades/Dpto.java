@@ -12,12 +12,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "dptos")
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Dpto {
@@ -39,5 +41,11 @@ public class Dpto {
     public void addEmp(Emp emp) {
         this.emp.add(emp);
         emp.setDptoElement(this);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Dpto [id=" + id + ", nombre=" + nombre + ", localidad=" + localidad + "]";
     }
 }

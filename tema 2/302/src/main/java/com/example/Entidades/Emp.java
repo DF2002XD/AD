@@ -41,21 +41,15 @@ public class Emp {
     @NonNull
     private boolean esJefe;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dpto_id")
     private Dpto dptoElement;
-    
-    /*public Emp() {
-        super();
-    }
 
-    public Emp(String nombre, String puesto, double sueldo, int edad, String dNI, boolean esJefe) {
-        super();
-        this.nombre = nombre;
-        this.puesto = puesto;
-        this.sueldo = sueldo;
-        this.edad = edad;
-        this.DNI = dNI;
-        this.esJefe = esJefe;
-    }*/
+    @Override
+    public String toString() {
+        return "Emp [id=" + id + ", nombre=" + nombre + ", puesto=" + puesto + ", sueldo=" + sueldo + ", edad=" + edad
+                + ", DNI=" + DNI + ", esJefe=" + esJefe + "]";
+    }
+    
+
 }
