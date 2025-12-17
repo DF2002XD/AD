@@ -3,12 +3,17 @@
 <hibernate-configuration>
   <session-factory>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="connection.url">jdbc:mysql://localhost:3306/empleados?createDatabaseIfNotExist=true&amp;serverTimezone=UTC</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/MarvelDB?createDatabaseIfNotExist=true&amp;serverTimezone=UTC</property>
     <property name="connection.username">root</property>
     <property name="connection.password">abc123.</property>
-    <property name="hbm2ddl.auto">create</property>
+    <property name="hbm2ddl.auto">validate</property>
     <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
     <property name="hibernate.dialect.storage_engine">innodb</property>
     <property name="hibernate.show_sql">true</property>
+
+    <mapping class="com.example.Entidades.Personaje"/>
+    <mapping class="com.example.Entidades.Habilidad"/>
+    <mapping class="com.example.Entidades.Equipo"/>
+
   </session-factory>
 </hibernate-configuration>
