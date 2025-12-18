@@ -13,7 +13,8 @@
 
     <mapping class="com.example.Entidades.Personaje"/>
     <mapping class="com.example.Entidades.Habilidad"/>
-    <mapping class="com.example.Entidades.Equipo"/>
-
+    <mapping class="com.example.Entidades.Evento"/>
+    <mapping class="com.example.Entidades.Participa"/>
+    <mapping class="com.example.Entidades.Traje"/>
   </session-factory>
 </hibernate-configuration>
