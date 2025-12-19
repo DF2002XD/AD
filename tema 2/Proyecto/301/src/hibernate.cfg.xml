@@ -15,6 +15,7 @@
     <mapping class="com.example.Entidades.Habilidad"/>
     <mapping class="com.example.Entidades.Evento"/>
     <mapping class="com.example.Entidades.Participa"/>
+    <mapping class="com.example.Entidades.ParticipaPK"/>
     <mapping class="com.example.Entidades.Traje"/>
   </session-factory>
 </hibernate-configuration>

@@ -23,10 +23,12 @@ public class Traje {
     @NonNull
     private String especificacion;
 
-    @OneToOne(mappedBy = "id_traje")
+   @OneToOne(mappedBy = "id_traje")
     private Personaje personaje;
 
-    public void setPersonaje(Personaje personaje) {
+    public void setId_traje(Personaje personaje) {
         this.personaje = personaje;
+        personaje.setId_traje(this);
+    
     }
 }

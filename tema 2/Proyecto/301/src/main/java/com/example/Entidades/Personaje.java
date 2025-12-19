@@ -2,7 +2,6 @@ package com.example.Entidades;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,21 +35,20 @@ public class Personaje {
     @OneToMany(mappedBy = "personaje")
     private List<Participa> listaparticipa;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private List<Traje> listatraje;
-    @JoinColumn(name = "traje_id", referencedColumnName = "id")
-    private List<Traje> id_traje = new ArrayList<>();
+    @OneToOne()
+    @JoinColumn(name = "id_traje", referencedColumnName = "id")
+    private Traje id_traje ;
 
-    public void setListatraje(Traje listatraje) {
-        this.listatraje.add(listatraje);
-        listatraje.setPersonaje(this);
+    public void setId_traje(Traje traje) {
+        this.id_traje = traje;
+        traje.setPersonaje(this);
     }
 
-    @ManyToMany(mappedBy = "listapersonaje")
+    @ManyToMany()
     @JoinTable(
         name = "personaje_habilidad",
-        joinColumns = @JoinColumn(name = "personaje_id"),
-        inverseJoinColumns = @JoinColumn(name = "habilidad_id")
+        joinColumns = @JoinColumn(name = "id_personaje"),
+        inverseJoinColumns = @JoinColumn(name = "id_habilidad")
     )
     private List<Habilidad> listahabilidad = new ArrayList<>();
     public void addListahabilidad(Habilidad habilidad) {
