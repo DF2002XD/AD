@@ -33,4 +33,14 @@ public class Habilidad {
     public void addListapersonaje(Personaje personaje) {
         this.listapersonaje.add(personaje);
     }
+
+    public Habilidad(){
+
+    }
+
+    @Override
+    public String toString() {
+        return "Habilidad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+    }
+
 }

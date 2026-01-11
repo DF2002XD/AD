@@ -24,4 +24,11 @@ public class Participa {
 
     Date fecha;
     String rol;
+    @Override
+    public String toString() {
+        return "Participa [fecha=" + fecha + ", rol=" + rol + "]";
+    }
+   
+
+    
 }

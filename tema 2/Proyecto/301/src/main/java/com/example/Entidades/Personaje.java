@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Personaje {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -37,7 +38,7 @@ public class Personaje {
 
     @OneToOne()
     @JoinColumn(name = "id_traje", referencedColumnName = "id")
-    private Traje id_traje ;
+    private Traje id_traje;
 
     public void setId_traje(Traje traje) {
         this.id_traje = traje;
@@ -45,14 +46,20 @@ public class Personaje {
     }
 
     @ManyToMany()
-    @JoinTable(
-        name = "personaje_habilidad",
-        joinColumns = @JoinColumn(name = "id_personaje"),
-        inverseJoinColumns = @JoinColumn(name = "id_habilidad")
-    )
+    @JoinTable(name = "personaje_habilidad", joinColumns = @JoinColumn(name = "id_personaje"), inverseJoinColumns = @JoinColumn(name = "id_habilidad"))
+
     private List<Habilidad> listahabilidad = new ArrayList<>();
+
     public void addListahabilidad(Habilidad habilidad) {
         this.listahabilidad.add(habilidad);
         habilidad.addListapersonaje(this);
+    }
+
+    public Personaje() {
+    }
+
+    @Override
+    public String toString() {
+        return "Personaje [id=" + id + ", nombre=" + nombre + ", alias=" + alias + ", id_traje=" + id_traje + "]";
     }
 }

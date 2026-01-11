@@ -31,4 +31,11 @@ public class Traje {
         personaje.setId_traje(this);
     
     }
+
+    public Traje() {
+    }
+    @Override
+    public String toString() {
+        return "Traje [id=" + id + ", especificacion=" + especificacion + "]";
+    }
 }

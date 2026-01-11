@@ -33,4 +33,13 @@ public class Evento {
 
     @OneToMany(mappedBy = "evento")
     private List<Participa> listaparticipa;
+
+    public Evento() {
+
+    }
+    @Override
+    public String toString() {
+        return "Evento [id=" + id + ", nombre=" + nombre + ", lugar=" + lugar + "]";
+    }
+
 }
