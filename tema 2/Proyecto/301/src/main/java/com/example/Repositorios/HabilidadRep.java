@@ -19,7 +19,10 @@ public class HabilidadRep implements Repositorio<Habilidad> {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.persist(t);
+            Query<Long> query = session.createQuery("SELECT COUNT(h.id) FROM Habilidad h ", Long.class);
+            int id = query.getSingleResult().intValue();
+            t.setId(id + 1);
+            session.merge(t);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
