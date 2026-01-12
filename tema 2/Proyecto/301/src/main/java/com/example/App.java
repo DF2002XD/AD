@@ -132,13 +132,12 @@ public class App {
             System.out.println("Evento no encontrado.");
             return;
         }
-        int Participaid = leerEntero("Ingrese el ID de la participación: ");
-        Participa participa = new Participa();
-        participa.setId(Participaid);
+        String fecha = leerNombre("Ingrese la fecha de participación (YYYY-MM-DD): ");
+        String rol = leerNombre("Ingrese el rol de la participación: ");
+        Participa participa = new Participa(fecha, rol);
         participa.setPersonaje(personaje);
         participa.setEvento(evento);
         personaje.getListaparticipa().add(participa);
-        evento.getListaparticipa().add(participa);
         personajeRep.modificar(personaje);
         eventoRep.modificar(evento);
         System.out.println("Participación registrada con éxito.");
