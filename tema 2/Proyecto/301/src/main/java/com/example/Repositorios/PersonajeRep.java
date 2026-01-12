@@ -4,9 +4,9 @@ import java.util.List;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import com.example.HibernateUtil;
 import com.example.Entidades.Personaje;
+
 
 public class PersonajeRep implements Repositorio<Personaje> {
     private static Session session = HibernateUtil.get().openSession();
@@ -16,8 +16,10 @@ public class PersonajeRep implements Repositorio<Personaje> {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-
-            session.persist(t);
+            Query<Long> query = session.createQuery("SELECT COUNT(p.id) FROM Personaje p ", Long.class);
+            int id = query.getSingleResult().intValue();
+            t.setId(id + 1);
+            session.merge(t);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

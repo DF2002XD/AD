@@ -20,7 +20,6 @@ public class App {
     private static final EventoRep eventoRep = new EventoRep();
 
     public static void main(String[] args) {
-        System.out.println("Test");
 
         Session session = HibernateUtil.get().openSession();
         System.out.println("Conexion a MySQL realizada con exito");
@@ -227,11 +226,8 @@ public class App {
 
     private static void crearPersonaje() {
         System.out.println("Creando personaje...");
-        System.out.print("Nombre: ");
-        String nombre = sc.next();
-        sc.nextLine();
-        System.out.print("Alias: ");
-        String alias = sc.next();
+        String nombre = leerNombre("Nombre: ");
+        String alias = leerNombre("Alias: ");
 
         personajeRep.guardar(new Personaje(nombre, alias));
     }

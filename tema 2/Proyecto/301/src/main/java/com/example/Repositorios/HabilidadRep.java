@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 
 import com.example.HibernateUtil;
 import com.example.Entidades.Habilidad;
+import com.example.Entidades.Personaje;
 
 public class HabilidadRep implements Repositorio<Habilidad> {
     
@@ -55,10 +56,25 @@ public class HabilidadRep implements Repositorio<Habilidad> {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            Query<Habilidad> query = session.createQuery("FROM Habilidad h WHERE h.nombre = :nombre", Habilidad.class);
+            /*Query<Habilidad> query = session.createQuery("FROM Habilidad h WHERE h.nombre = :nombre", Habilidad.class);
             query.setParameter("nombre", nombre);
+            session.createNamedMutationQuery("Dele")
             Habilidad habilidad = query.uniqueResult();
             if (habilidad != null) {
+                session.remove(habilidad);
+            }
+            tx.commit();*/
+            Habilidad habilidad = session.createQuery("FROM Habilidad h WHERE h.nombre = :nombre", Habilidad.class)
+                    .setParameter("nombre", nombre)
+                    .uniqueResult();
+
+            if (habilidad != null) {
+                // Remover la habilidad de todos los personajes que la tienen
+                for (Personaje personaje : habilidad.getListapersonaje()) {
+                    personaje.getListahabilidad().remove(habilidad);
+                }
+                habilidad.getListapersonaje().clear();
+                
                 session.remove(habilidad);
             }
             tx.commit();

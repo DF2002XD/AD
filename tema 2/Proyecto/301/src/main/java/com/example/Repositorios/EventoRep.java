@@ -8,7 +8,6 @@ import org.w3c.dom.events.Event;
 
 import com.example.HibernateUtil;
 import com.example.Entidades.Evento;
-import com.example.Entidades.Participa;
 
 public class EventoRep {
     private static Session session = HibernateUtil.get().openSession();

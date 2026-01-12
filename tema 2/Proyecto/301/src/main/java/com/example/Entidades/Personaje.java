@@ -2,6 +2,7 @@ package com.example.Entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class Personaje {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NonNull
@@ -33,7 +34,7 @@ public class Personaje {
     @NonNull
     private String alias;
 
-    @OneToMany(mappedBy = "personaje")
+    @OneToMany(mappedBy = "personaje", cascade = CascadeType.REMOVE)
     private List<Participa> listaparticipa;
 
     @OneToOne()
