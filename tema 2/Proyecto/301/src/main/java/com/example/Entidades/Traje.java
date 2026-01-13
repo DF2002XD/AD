@@ -28,8 +28,9 @@ public class Traje {
 
     public void setId_traje(Personaje personaje) {
         this.personaje = personaje;
-        personaje.setId_traje(this);
-    
+        if (personaje != null) {
+            personaje.setId_traje(this);
+        }
     }
 
     public Traje() {

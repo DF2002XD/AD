@@ -6,8 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
 
 @Entity
+
 public class Participa {
     @EmbeddedId
     ParticipaPK id;
@@ -24,6 +28,11 @@ public class Participa {
 
     Date fecha;
     String rol;
+
+    public Participa() {
+    }
+
+
     @Override
     public String toString() {
         return "Participa [fecha=" + fecha + ", rol=" + rol + "]";

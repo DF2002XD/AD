@@ -4,20 +4,24 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.hibernate.Session;
-import org.w3c.dom.events.Event;
-
+import com.example.Entidades.Evento;
 import com.example.Entidades.Habilidad;
-import com.example.Entidades.Participa;
 import com.example.Entidades.Personaje;
+import com.example.Entidades.Traje;
 import com.example.Repositorios.EventoRep;
 import com.example.Repositorios.HabilidadRep;
+import com.example.Repositorios.ParticipaRep;
 import com.example.Repositorios.PersonajeRep;
+import com.example.Repositorios.TrajeRep;
 
 public class App {
     private static final Scanner sc = new Scanner(System.in);
     private static final PersonajeRep personajeRep = new PersonajeRep();
     private static final HabilidadRep habilidadRep = new HabilidadRep();
     private static final EventoRep eventoRep = new EventoRep();
+    private static final ParticipaRep participaRep = new ParticipaRep();
+    private static final TrajeRep trajeRep = new TrajeRep();
+
 
     public static void main(String[] args) {
 
@@ -110,6 +114,15 @@ public class App {
             System.out.println("Personaje no encontrado.");
             return;
         }
+        trajeRep.mostrarTrajes();
+        int trajeId = leerEntero("Ingrese el ID del nuevo traje: ");
+        Traje nuevoTraje = HibernateUtil.get().openSession().get(Traje.class, trajeId);
+        if (nuevoTraje == null) {
+            System.out.println("Traje no encontrado.");
+            return;
+        }
+        personajeRep.actualizarTraje(personaje.getId(), trajeId);
+        System.out.println("Traje cambiado con éxito.");
     }
 
     private static void registrarParticipacionEnEvento() {
@@ -125,7 +138,7 @@ public class App {
         }
         eventoRep.mostrarEventos();
         String eventoNombre = leerNombre("Ingrese el nombre del evento: ");
-        Event evento = HibernateUtil.get().openSession().createQuery("FROM Evento e WHERE e.nombre = :nombre", Event.class)
+        Evento evento = HibernateUtil.get().openSession().createQuery("FROM Evento e WHERE e.nombre = :nombre", Evento.class)
                 .setParameter("nombre", eventoNombre)
                 .uniqueResult();
         if (evento == null) {
@@ -134,14 +147,8 @@ public class App {
         }
         String fecha = leerNombre("Ingrese la fecha de participación (YYYY-MM-DD): ");
         String rol = leerNombre("Ingrese el rol de la participación: ");
-        Participa participa = new Participa(fecha, rol);
-        participa.setPersonaje(personaje);
-        participa.setEvento(evento);
-        personaje.getListaparticipa().add(participa);
-        personajeRep.modificar(personaje);
-        eventoRep.modificar(evento);
+        participaRep.registrarParticipacion(personaje.getId(), evento.getId(), fecha, rol);
         System.out.println("Participación registrada con éxito.");
-
     }
 
     private static void asignarHabilidadAPersonaje() {
@@ -195,7 +202,6 @@ public class App {
         System.out.println("Creando habilidad...");
         String nombre = leerNombre("Nombre de la habilidad: ");
         String descripcion = leerNombre("Descripción de la habilidad: ");
-
         habilidadRep.guardar(new Habilidad(nombre, descripcion));
     }
 
@@ -227,7 +233,6 @@ public class App {
         System.out.println("Creando personaje...");
         String nombre = leerNombre("Nombre: ");
         String alias = leerNombre("Alias: ");
-
         personajeRep.guardar(new Personaje(nombre, alias));
     }
 
@@ -264,7 +269,7 @@ public class App {
         while (true) {
             System.out.println(mensaje);
             String nombre = sc.nextLine().trim();
-            if (nombre.length() >= 3 && nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            if (!nombre.isEmpty()) {
                 return nombre;
             } else {
                 System.out.println("Nombre inválido. Inténtelo de nuevo.");
