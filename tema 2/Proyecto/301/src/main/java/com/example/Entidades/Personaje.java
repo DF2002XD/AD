@@ -43,7 +43,9 @@ public class Personaje {
 
     public void setId_traje(Traje traje) {
         this.id_traje = traje;
-        traje.setPersonaje(this);
+        if (traje != null) {
+            traje.setPersonaje(this);
+        }
     }
 
     @ManyToMany()

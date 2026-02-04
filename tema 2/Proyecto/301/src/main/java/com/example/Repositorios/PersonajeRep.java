@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.example.HibernateUtil;
 import com.example.Entidades.Personaje;
-
+import com.example.Entidades.Traje;
 
 public class PersonajeRep implements Repositorio<Personaje> {
     private static Session session = HibernateUtil.get().openSession();
@@ -89,6 +89,36 @@ public class PersonajeRep implements Repositorio<Personaje> {
         List<Personaje> personajes = query.getResultList();
         for (Personaje personaje : personajes) {
             System.out.println(personaje);
+        }
+    }
+
+    public void actualizarTraje(int personajeId, int trajeId) {
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Personaje personaje = session.get(Personaje.class, personajeId);
+            Traje traje = session.get(Traje.class, trajeId);
+            if (personaje != null && traje != null) {
+
+                if (personaje.getId_traje() != null) {
+                    personaje.getId_traje().setPersonaje(null);
+                }
+
+                if (traje.getPersonaje() != null) {
+                    Personaje oldPersonaje = traje.getPersonaje();
+                    oldPersonaje.setId_traje(null);
+                    session.merge(oldPersonaje);
+                    session.flush();
+                }
+                personaje.setId_traje(traje);
+                session.merge(personaje);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+                throw e;
+            }
         }
     }
 

@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 public class Evento {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
