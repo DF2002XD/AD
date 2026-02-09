@@ -1,0 +1,19 @@
+[
+  {
+    "cliente_id": { "$oid": "698a34ab6cc206341729fa68" },
+    "productos": [
+      {
+        "producto_id": 1,
+        "nombre": "Laptop HP Pavilion",
+        "cantidad": 2,
+        "precio_unitario": 799.99
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Tablet Lenovo Tab M10",
+        "cantidad": 1,
+        "precio_unitario": 199.99
+      }
+    ]
+  }
+]

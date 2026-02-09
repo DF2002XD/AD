@@ -1,0 +1,15 @@
+[
+  {
+    "cliente_id": { "$oid": "698a34ab6cc206341729fa68" },
+    "productos": [
+      {
+        "producto_id": 1,
+        "nombre": "Laptop HP Pavilion",
+        "cantidad": 2,
+        "precio_unitario": 799.99
+      }
+    ],
+    "total": 1599.98,
+    "fecha_pedido": { "$date": "2023-01-01T12:30:00.000Z" }
+  }
+]
