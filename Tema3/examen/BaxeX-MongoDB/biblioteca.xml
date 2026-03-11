@@ -1,0 +1,426 @@
+<biblioteca>
+    <libro id="1">
+        <titulo>El Señor de los Anillos</titulo>
+        <autor>J.R.R. Tolkien</autor>
+        <genero>Fantasía</genero>
+        <año_publicacion>1954</año_publicacion>
+        <precio>19.99</precio>
+        <detalles>
+            <paginas>1178</paginas>
+            <idioma>Español</idioma>
+            <editorial>Minotauro</editorial>
+            <valoracion>
+                <puntuacion>4.8</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario1</usuario>
+                        <opinion>Magnífico mundo creado por Tolkien, una obra maestra.</opinion>
+                    </resena>
+                    <resena>
+                        <usuario>usuario2</usuario>
+                        <opinion>Una historia épica que nunca pasa de moda.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="2">
+        <titulo>Cien años de soledad</titulo>
+        <autor>Gabriel García Márquez</autor>
+        <genero>Realismo mágico</genero>
+        <año_publicacion>1967</año_publicacion>
+        <precio>15.50</precio>
+        <detalles>
+            <paginas>417</paginas>
+            <idioma>Español</idioma>
+            <editorial>Sudamericana</editorial>
+            <valoracion>
+                <puntuacion>4.5</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario3</usuario>
+                        <opinion>Una obra maestra del realismo mágico, imprescindible.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="3">
+        <titulo>1984</titulo>
+        <autor>George Orwell</autor>
+        <genero>Ficción distópica</genero>
+        <año_publicacion>1949</año_publicacion>
+        <precio>12.00</precio>
+        <detalles>
+            <paginas>328</paginas>
+            <idioma>Español</idioma>
+            <editorial>Debolsillo</editorial>
+            <valoracion>
+                <puntuacion>4.7</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario4</usuario>
+                        <opinion>Una visión perturbadora del futuro, pero muy reflexiva.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="4">
+        <titulo>Harry Potter y la Piedra Filosofal</titulo>
+        <autor>J.K. Rowling</autor>
+        <genero>Fantasía</genero>
+        <año_publicacion>1997</año_publicacion>
+        <precio>14.99</precio>
+        <detalles>
+            <paginas>309</paginas>
+            <idioma>Español</idioma>
+            <editorial>Salamandra</editorial>
+            <valoracion>
+                <puntuacion>4.9</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario5</usuario>
+                        <opinion>Una saga increíble que ha marcado a toda una generación.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="5">
+        <titulo>Orgullo y prejuicio</titulo>
+        <autor>Jane Austen</autor>
+        <genero>Novela romántica</genero>
+        <año_publicacion>1813</año_publicacion>
+        <precio>11.50</precio>
+        <detalles>
+            <paginas>279</paginas>
+            <idioma>Español</idioma>
+            <editorial>Austral</editorial>
+            <valoracion>
+                <puntuacion>4.6</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario6</usuario>
+                        <opinion>Una historia clásica y encantadora que nunca pasa de moda.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="6">
+        <titulo>El Principito</titulo>
+        <autor>Antoine de Saint-Exupéry</autor>
+        <genero>Literatura infantil</genero>
+        <año_publicacion>1943</año_publicacion>
+        <precio>9.99</precio>
+        <detalles>
+            <paginas>96</paginas>
+            <idioma>Español</idioma>
+            <editorial>Salvat</editorial>
+            <valoracion>
+                <puntuacion>4.8</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario7</usuario>
+                        <opinion>Una historia encantadora que cautiva a lectores de todas las edades.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="7">
+        <titulo>Don Quijote de la Mancha</titulo>
+        <autor>Miguel de Cervantes</autor>
+        <genero>Novela</genero>
+        <año_publicacion>1605</año_publicacion>
+        <precio>18.50</precio>
+        <detalles>
+            <paginas>863</paginas>
+            <idioma>Español</idioma>
+            <editorial>Alianza Editorial</editorial>
+            <valoracion>
+                <puntuacion>4.7</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario8</usuario>
+                        <opinion>Una obra maestra que refleja la locura y la grandeza del ser humano.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="8">
+        <titulo>Los pilares de la Tierra</titulo>
+        <autor>Ken Follett</autor>
+        <genero>Ficción histórica</genero>
+        <año_publicacion>1989</año_publicacion>
+        <precio>22.99</precio>
+        <detalles>
+            <paginas>973</paginas>
+            <idioma>Español</idioma>
+            <editorial>Plaza y Janés</editorial>
+            <valoracion>
+                <puntuacion>4.6</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario9</usuario>
+                        <opinion>Una novela épica que te sumerge en la Europa medieval.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="9">
+        <titulo>El retrato de Dorian Gray</titulo>
+        <autor>Oscar Wilde</autor>
+        <genero>Ficción gótica</genero>
+        <año_publicacion>1890</año_publicacion>
+        <precio>16.00</precio>
+        <detalles>
+            <paginas>254</paginas>
+            <idioma>Español</idioma>
+            <editorial>Alba Editorial</editorial>
+            <valoracion>
+                <puntuacion>4.9</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario10</usuario>
+                        <opinion>Una historia intrigante sobre la decadencia moral y la vanidad.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="10">
+        <titulo>Moby Dick</titulo>
+        <autor>Herman Melville</autor>
+        <genero>Aventura</genero>
+        <año_publicacion>1851</año_publicacion>
+        <precio>14.50</precio>
+        <detalles>
+            <paginas>722</paginas>
+            <idioma>Español</idioma>
+            <editorial>Penguin Clásicos</editorial>
+            <valoracion>
+                <puntuacion>4.4</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario11</usuario>
+                        <opinion>Una fascinante odisea marítima llena de aventuras y simbolismo.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="11">
+        <titulo>La sombra del viento</titulo>
+        <autor>Carlos Ruiz Zafón</autor>
+        <genero>Novela histórica</genero>
+        <año_publicacion>2001</año_publicacion>
+        <precio>17.99</precio>
+        <detalles>
+            <paginas>560</paginas>
+            <idioma>Español</idioma>
+            <editorial>Planeta</editorial>
+            <valoracion>
+                <puntuacion>4.6</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario7</usuario>
+                        <opinion>Una historia envolvente que te atrapa desde la primera página.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="12">
+        <titulo>Crónica de una muerte anunciada</titulo>
+        <autor>Gabriel García Márquez</autor>
+        <genero>Novela</genero>
+        <año_publicacion>1981</año_publicacion>
+        <precio>14.50</precio>
+        <detalles>
+            <paginas>128</paginas>
+            <idioma>Español</idioma>
+            <editorial>Sudamericana</editorial>
+            <valoracion>
+                <puntuacion>4.4</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario8</usuario>
+                        <opinion>Una obra corta pero intensa que deja una profunda impresión.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="13">
+        <titulo>La ladrona de libros</titulo>
+        <autor>Markus Zusak</autor>
+        <genero>Novela histórica</genero>
+        <año_publicacion>2005</año_publicacion>
+        <precio>16.99</precio>
+        <detalles>
+            <paginas>576</paginas>
+            <idioma>Español</idioma>
+            <editorial>Debolsillo</editorial>
+            <valoracion>
+                <puntuacion>4.5</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario9</usuario>
+                        <opinion>Una historia conmovedora contada desde una perspectiva única.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="14">
+        <titulo>Los juegos del hambre</titulo>
+        <autor>Suzanne Collins</autor>
+        <genero>Ficción distópica</genero>
+        <año_publicacion>2008</año_publicacion>
+        <precio>13.99</precio>
+        <detalles>
+            <paginas>464</paginas>
+            <idioma>Español</idioma>
+            <editorial>Molino</editorial>
+            <valoracion>
+                <puntuacion>4.8</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario10</usuario>
+                        <opinion>Una saga adictiva llena de acción y suspense.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="15">
+        <titulo>El alquimista</titulo>
+        <autor>Paulo Coelho</autor>
+        <genero>Ficción espiritual</genero>
+        <año_publicacion>1988</año_publicacion>
+        <precio>11.00</precio>
+        <detalles>
+            <paginas>208</paginas>
+            <idioma>Español</idioma>
+            <editorial>HarperCollins</editorial>
+            <valoracion>
+                <puntuacion>4.6</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario7</usuario>
+                        <opinion>Una historia inspiradora sobre seguir tus sueños.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="16">
+        <titulo>1984</titulo>
+        <autor>George Orwell</autor>
+        <genero>Ficción distópica</genero>
+        <año_publicacion>1949</año_publicacion>
+        <precio>12.00</precio>
+        <detalles>
+            <paginas>328</paginas>
+            <idioma>Español</idioma>
+            <editorial>Debolsillo</editorial>
+            <valoracion>
+                <puntuacion>4.7</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario8</usuario>
+                        <opinion>Una visión perturbadora del futuro, pero muy reflexiva.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="17">
+        <titulo>Harry Potter y la cámara secreta</titulo>
+        <autor>J.K. Rowling</autor>
+        <genero>Fantasía</genero>
+        <año_publicacion>1998</año_publicacion>
+        <precio>15.99</precio>
+        <detalles>
+            <paginas>256</paginas>
+            <idioma>Español</idioma>
+            <editorial>Salamandra</editorial>
+            <valoracion>
+                <puntuacion>4.9</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario9</usuario>
+                        <opinion>Otra entrega brillante de la saga, llena de magia y aventura.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="18">
+        <titulo>El laberinto de los espíritus</titulo>
+        <autor>Carlos Ruiz Zafón</autor>
+        <genero>Novela histórica</genero>
+        <año_publicacion>2016</año_publicacion>
+        <precio>18.99</precio>
+        <detalles>
+            <paginas>928</paginas>
+            <idioma>Español</idioma>
+            <editorial>Planeta</editorial>
+            <valoracion>
+                <puntuacion>4.7</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario10</usuario>
+                        <opinion>Otra obra maestra de Zafón, con intriga y misterio en cada página.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="19">
+        <titulo>Crimen y castigo</titulo>
+        <autor>Fiodor Dostoyevski</autor>
+        <genero>Novela psicológica</genero>
+        <año_publicacion>1866</año_publicacion>
+        <precio>16.50</precio>
+        <detalles>
+            <paginas>656</paginas>
+            <idioma>Español</idioma>
+            <editorial>Alba Editorial</editorial>
+            <valoracion>
+                <puntuacion>4.6</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario7</usuario>
+                        <opinion>Una obra maestra que explora las profundidades de la mente humana.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+    <libro id="20">
+        <titulo>El nombre del viento</titulo>
+        <autor>Patrick Rothfuss</autor>
+        <genero>Fantasía épica</genero>
+        <año_publicacion>2007</año_publicacion>
+        <precio>20.00</precio>
+        <detalles>
+            <paginas>864</paginas>
+            <idioma>Español</idioma>
+            <editorial>Plaza y Janés</editorial>
+            <valoracion>
+                <puntuacion>4.9</puntuacion>
+                <resenas>
+                    <resena>
+                        <usuario>usuario8</usuario>
+                        <opinion>Una obra maestra de la fantasía, con una narrativa cautivadora.</opinion>
+                    </resena>
+                </resenas>
+            </valoracion>
+        </detalles>
+    </libro>
+</biblioteca>
