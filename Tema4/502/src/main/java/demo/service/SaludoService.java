@@ -8,18 +8,18 @@ public class SaludoService {
         return "Hola " + nombre + "!";
     }
 
-    public String SaludarUsuarioIdioma(String nombre, String idioma) {
+    public String SaludarUsuarioIdioma(String nombrei, String idioma) {
         switch (idioma) {
             case "ESPAÑOL":
-                return "Hola " + nombre + "!";
+                return "Hola " + nombrei + "!";
             case "INGLES":
-                return "Hello " + nombre + "!";
+                return "Hello " + nombrei + "!";
             case "FRANCES":
-                return "Bonjour " + nombre + "!";
+                return "Bonjour " + nombrei + "!";
             case "ALEMAN":
-                return "Hallo " + nombre + "!";
+                return "Hallo " + nombrei + "!";
             case "ITALIANO":
-                return "Ciao " + nombre + "!";
+                return "Ciao " + nombrei + "!";
             default:
                 return "Saludo no soportado para el idioma especificado";
         }

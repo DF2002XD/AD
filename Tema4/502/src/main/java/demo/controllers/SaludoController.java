@@ -17,15 +17,15 @@ public class SaludoController {
         this.saludoService = saludoService;
     }
 
-    /*@GetMapping("/{nombre}")
+    @GetMapping("/{nombre}")
     public ResponseEntity<String> saludar(@PathVariable String nombre) {
         String saludo = saludoService.SaludarUsuario(nombre);
         return ResponseEntity.ok(saludo);
-    }*/
+    }
         
-    @GetMapping("/{nombre}-{idioma}")
-    public ResponseEntity<String> saludar(@PathVariable String nombre, @PathVariable String idioma) {
-        String saludo = saludoService.SaludarUsuarioIdioma(nombre, idioma);
+    @GetMapping("/{nombrei}-{idioma}")
+    public ResponseEntity<String> saludar(@PathVariable String nombrei, @PathVariable String idioma) {
+        String saludo = saludoService.SaludarUsuarioIdioma(nombrei, idioma);
         return ResponseEntity.ok(saludo);
     }
 
