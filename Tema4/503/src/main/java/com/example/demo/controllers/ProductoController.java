@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entitys.Producto;
 import com.example.demo.services.ProductoService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +49,15 @@ public class ProductoController {
         return ResponseEntity.ok().body("Producto guardado correctamente");
     }
     
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarProducto(@PathVariable long id) {
+         Producto producto = productoService.buscarProductoPorId(id);
+        if (producto != null) {
+            productoService.eliminarProducto(id);
+            return ResponseEntity.ok().body("Producto eliminado correctamente");   
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
