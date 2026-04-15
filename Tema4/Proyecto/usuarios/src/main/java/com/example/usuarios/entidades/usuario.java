@@ -8,17 +8,19 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "usuario")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @RequiredArgsConstructor
-public class usuario {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int  usuario_id;
     @NonNull
     private String nombre;
     @NonNull
@@ -26,5 +28,5 @@ public class usuario {
     @NonNull
     private String direccion;
     @NonNull
-    private String contrasenha;
+    private String contrasena;
 }
