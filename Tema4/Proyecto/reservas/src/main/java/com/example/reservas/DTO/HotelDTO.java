@@ -1,15 +1,19 @@
-package com.example.usuarios.entidades;
+package com.example.reservas.DTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioValidarDTO {
+@SuperBuilder
+public class HotelDTO {
     private String nombre;
-    private String contrasena;
+    private String direccion;
 }

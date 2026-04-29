@@ -1,4 +1,4 @@
-package com.example.usuarios.entidades;
+package com.example.reservas.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UsuarioIDDTO extends UsuarioDTO {
-    private int usuario_id;
+public class HabitacionIDDTO extends HabitacionDTO {
+    private int habitacion_id;
 }

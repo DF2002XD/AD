@@ -2,10 +2,11 @@ package com.example.usuarios.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.usuarios.DTO.UsuarioDTO;
+import com.example.usuarios.DTO.UsuarioIDDTO;
+import com.example.usuarios.DTO.UsuarioValidarDTO;
 import com.example.usuarios.entidades.Usuario;
-import com.example.usuarios.entidades.UsuarioDTO;
-import com.example.usuarios.entidades.UsuarioIDDTO;
-import com.example.usuarios.entidades.UsuarioValidarDTO;
 import com.example.usuarios.repositorios.UsuarioRep;
 
 @Service

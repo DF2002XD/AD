@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.usuarios.entidades.UsuarioDTO;
-import com.example.usuarios.entidades.UsuarioIDDTO;
-import com.example.usuarios.entidades.UsuarioValidarDTO;
+
+import com.example.usuarios.DTO.UsuarioDTO;
+import com.example.usuarios.DTO.UsuarioIDDTO;
+import com.example.usuarios.DTO.UsuarioValidarDTO;
 import com.example.usuarios.servicios.UsuarioService;
 import org.springframework.web.bind.annotation.PutMapping;
 

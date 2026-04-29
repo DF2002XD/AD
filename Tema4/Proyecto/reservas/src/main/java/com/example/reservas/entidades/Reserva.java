@@ -1,5 +1,7 @@
 package com.example.reservas.entidades;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,9 +33,9 @@ public class Reserva {
     private Habitacion habitacion;
 
     @NonNull
-    private String fecha_inicio;
+    private LocalDate fecha_inicio;
     @NonNull
-    private String fecha_fin;
+    private LocalDate fecha_fin;
     @NonNull
     private String estado;
 

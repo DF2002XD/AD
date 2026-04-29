@@ -1,10 +1,9 @@
 package com.example.reservas.entidades;
 
+import java.math.BigDecimal;
 import java.util.List;
-
-import org.hibernate.annotations.ManyToAny;
-import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,7 +36,10 @@ public class Habitacion {
     @NonNull
     private int numero_habitacion;
     @NonNull
-    private double precio;
+    private String tipo;
+    @NonNull
+    @Column(precision = 10, scale = 2)
+    private BigDecimal precio;
     @NonNull
     private boolean disponible;
 

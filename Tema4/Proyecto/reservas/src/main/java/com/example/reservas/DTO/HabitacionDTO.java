@@ -1,5 +1,6 @@
-package com.example.usuarios.entidades;
+package com.example.reservas.DTO;
 
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -13,9 +14,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UsuarioDTO {
-    private String nombre;
-    private String correo_electronico;
-    private String direccion;
-    private String contrasena;
+public class HabitacionDTO {
+    private int hotel_id;
+    private int numero_habitacion;
+    private String tipo;
+    private BigDecimal precio;
+    private boolean disponible;
 }
