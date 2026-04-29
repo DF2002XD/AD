@@ -1,24 +1,21 @@
 package com.example.usuarios.entidades;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+@Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 public class UsuarioDTO {
-    private int usuario_id;
     private String nombre;
     private String correo_electronico;
     private String direccion;
     private String contrasena;
-    public UsuarioDTO(Usuario usuario) {
-        this.usuario_id = usuario.getUsuario_id();
-        this.nombre = usuario.getNombre();
-        this.correo_electronico = usuario.getCorreo_electronico();
-        this.direccion = usuario.getDireccion();
-        this.contrasena = usuario.getContrasena();
-    }
-
 }

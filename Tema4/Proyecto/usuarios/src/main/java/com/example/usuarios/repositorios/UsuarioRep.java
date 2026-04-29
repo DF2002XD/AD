@@ -6,5 +6,9 @@ import com.example.usuarios.entidades.Usuario;
 
 @Repository
 public interface UsuarioRep extends JpaRepository<Usuario, Integer> {
-     
+
+    Usuario findByNombreAndContrasena(String nombre, String contrasena);
+
+    Usuario findByNombre(String nombre);
+ 
 }
