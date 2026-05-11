@@ -16,15 +16,15 @@ public class HabitacionService {
     @Autowired
     private HotelRep HotelRep;
 
-    public void crearHabitación(HabitacionDTO nuevaHabitaciónDto) {
-        Hotel hotel = HotelRep.findById(nuevaHabitaciónDto.getHotel_id())
-                .orElseThrow(() -> new RuntimeException("Hotel no encontrado con ID: " + nuevaHabitaciónDto.getHotel_id()));
+    public void crearHabitacion(HabitacionDTO nuevaHabitacionDto) {
+        Hotel hotel = HotelRep.findById(nuevaHabitacionDto.getHotel_id())
+                .orElseThrow(() -> new RuntimeException("Hotel no encontrado con ID: " + nuevaHabitacionDto.getHotel_id()));
         Habitacion nuevaHabitacion = new Habitacion();
         nuevaHabitacion.setHotel(hotel);
-        nuevaHabitacion.setNumero_habitacion(nuevaHabitaciónDto.getNumero_habitacion());
-        nuevaHabitacion.setTipo(nuevaHabitaciónDto.getTipo());
-        nuevaHabitacion.setPrecio(nuevaHabitaciónDto.getPrecio());
-        nuevaHabitacion.setDisponible(nuevaHabitaciónDto.isDisponible());
+        nuevaHabitacion.setNumero_habitacion(nuevaHabitacionDto.getNumero_habitacion());
+        nuevaHabitacion.setTipo(nuevaHabitacionDto.getTipo());
+        nuevaHabitacion.setPrecio(nuevaHabitacionDto.getPrecio());
+        nuevaHabitacion.setDisponible(nuevaHabitacionDto.isDisponible());
         HabitacionRep.save(nuevaHabitacion);
     }
 
@@ -41,9 +41,9 @@ public class HabitacionService {
         HabitacionRep.save(habitacionExistente);
     }
 
-    public void eliminarHabitacion(HabitacionIDDTO habitacionIDDTO) {
-        Habitacion habitacion = HabitacionRep.findById(habitacionIDDTO.getHabitacion_id())
-                .orElseThrow(() -> new RuntimeException("Habitación no encontrada con ID: " + habitacionIDDTO.getHabitacion_id()));
+    public void eliminarHabitacion(int id) {
+        Habitacion habitacion = HabitacionRep.findById(id)
+                .orElseThrow(() -> new RuntimeException("Habitación no encontrada con ID: " + id));
         HabitacionRep.delete(habitacion);
     }
     

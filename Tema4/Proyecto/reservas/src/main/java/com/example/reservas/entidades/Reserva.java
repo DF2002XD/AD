@@ -26,6 +26,7 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reserva_id;
 
+    
     private int usuario_id;
 
     @ManyToOne
