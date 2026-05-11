@@ -1,7 +1,3 @@
-# ============================================
-# TIPOS DE ENTRADA (input) - para argumentos
-# ============================================
-
 input ComentarioCrearInput {
     nombre: String!
     contrasena: String!
@@ -11,20 +7,12 @@ input ComentarioCrearInput {
     comentario: String!
 }
 
-# ============================================
-# TIPOS DE SALIDA (type) - para respuestas
-# ============================================
-
 type ComentarioOutputDTO {
     nombreHotel: String!
     reservaId: Int!
     puntuacion: Float!
     comentario: String!
 }
-
-# ============================================
-# QUERIES
-# ============================================
 
 type Query {
     listarComentariosHotel(nombre: String!, contrasena: String!, nombreHotel: String!): [ComentarioOutputDTO!]!
@@ -33,10 +21,6 @@ type Query {
     puntuacionMediaHotel(nombre: String!, contrasena: String!, nombreHotel: String!): Float!
     puntuacionMediaUsuario(nombre: String!, contrasena: String!): Float!
 }
-
-# ============================================
-# MUTATIONS
-# ============================================
 
 type Mutation {
     crearComentario(comentarioCrearInput: ComentarioCrearInput!): ComentarioOutputDTO!

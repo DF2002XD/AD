@@ -12,5 +12,6 @@ public interface ComentarioRep extends MongoRepository<Comentario, String> {
     
     List<Comentario> findByUsuarioIdAndReservaId(int usuarioId, int reservaId);
     
+    
     boolean existsByUsuarioIdAndHotelIdAndReservaId(int usuarioId, int hotelId, int reservaId);
 }

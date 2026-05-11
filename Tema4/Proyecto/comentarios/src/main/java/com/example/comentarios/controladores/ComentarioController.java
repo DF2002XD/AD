@@ -1,8 +1,6 @@
 package com.example.comentarios.controladores;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -39,7 +37,8 @@ public class ComentarioController {
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO,
+                    Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido para crear el comentario");
@@ -51,16 +50,14 @@ public class ComentarioController {
             int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
 
             // 3. Obtener ID de hotel (POST con credenciales en body)
-            Map<String, String> bodyHotel = new HashMap<>();
-            bodyHotel.put("nombre", comentarioCrearDTO.getNombre());
-            bodyHotel.put("contrasena", comentarioCrearDTO.getContrasena());
-
             String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + comentarioCrearDTO.getNombreHotel();
-            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, usuarioValidarDTO,
+                    String.class);
             int hotelId = Integer.parseInt(responseHotelId.getBody());
 
             // 4. Verificar reserva
-            String urlCheck = URL_RESERVAS + "/reservas/check/" + usuarioId + "/" + hotelId + "/" + comentarioCrearDTO.getReservaId();
+            String urlCheck = URL_RESERVAS + "/reservas/check/" + usuarioId + "/" + hotelId + "/"
+                    + comentarioCrearDTO.getReservaId();
             ResponseEntity<Boolean> responseCheck = restTemplate.getForEntity(urlCheck, Boolean.class);
 
             if (responseCheck.getBody() == null || !responseCheck.getBody()) {
@@ -69,12 +66,11 @@ public class ComentarioController {
 
             // 5. Guardar
             comentarioService.crearComentario(
-                usuarioId,
-                hotelId,
-                comentarioCrearDTO.getReservaId(),
-                comentarioCrearDTO.getPuntuacion(),
-                comentarioCrearDTO.getComentario()
-            );
+                    usuarioId,
+                    hotelId,
+                    comentarioCrearDTO.getReservaId(),
+                    comentarioCrearDTO.getPuntuacion(),
+                    comentarioCrearDTO.getComentario());
 
             return comentarioCrearDTO;
 
@@ -105,7 +101,8 @@ public class ComentarioController {
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO,
+                    Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido");
@@ -133,25 +130,16 @@ public class ComentarioController {
             @Argument String nombreHotel) {
 
         try {
-            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
-            usuarioValidarDTO.setNombre(nombre);
-            usuarioValidarDTO.setContrasena(contrasena);
+            UsuarioValidarDTO credenciales = new UsuarioValidarDTO();
+            credenciales.setNombre(nombre);
+            credenciales.setContrasena(contrasena);
 
             RestTemplate restTemplate = new RestTemplate();
-            String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
-
-            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
-                throw new RuntimeException("Usuario no valido");
-            }
-
-            Map<String, String> bodyHotel = new HashMap<>();
-            bodyHotel.put("nombre", nombre);
-            bodyHotel.put("contrasena", contrasena);
-
             String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + nombreHotel;
-            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
-            int hotelId = Integer.parseInt(responseHotelId.getBody());
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, credenciales, String.class);
+
+            String bodyHotelId = responseHotelId.getBody();
+            int hotelId = Integer.parseInt(bodyHotelId != null ? bodyHotelId.replaceAll("[^0-9]", "") : "0");
 
             return comentarioService.listarComentariosHotel(hotelId, nombreHotel);
 
@@ -172,7 +160,8 @@ public class ComentarioController {
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO,
+                    Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido");
@@ -182,7 +171,7 @@ public class ComentarioController {
             ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
             int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
 
-            return comentarioService.listarComentariosUsuario(usuarioId);
+            return comentarioService.listarComentariosUsuario(usuarioId, nombre, contrasena);
 
         } catch (Exception e) {
             throw new RuntimeException("Error al listar comentarios del usuario: " + e.getMessage());
@@ -196,23 +185,27 @@ public class ComentarioController {
             @Argument int reservaId) {
 
         try {
+            // 1. Validar credenciales
             UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
             usuarioValidarDTO.setNombre(nombre);
             usuarioValidarDTO.setContrasena(contrasena);
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(
+                    urlValidar, usuarioValidarDTO, Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido");
             }
 
+            // 2. Obtener ID del usuario
             String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + nombre;
             ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
             int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
 
-            return comentarioService.mostrarComentarioUsuarioReserva(usuarioId, reservaId);
+            // 3. Llamar al service con usuarioId + reservaId
+            return comentarioService.mostrarComentarioUsuarioReserva(usuarioId, reservaId, nombre, contrasena);
 
         } catch (Exception e) {
             throw new RuntimeException("Error al mostrar comentario: " + e.getMessage());
@@ -232,19 +225,21 @@ public class ComentarioController {
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(
+                    urlValidar, usuarioValidarDTO, Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido");
             }
 
-            Map<String, String> bodyHotel = new HashMap<>();
-            bodyHotel.put("nombre", nombre);
-            bodyHotel.put("contrasena", contrasena);
-
+            // OBTENER ID DEL HOTEL (con limpieza del texto de respuesta)
             String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + nombreHotel;
-            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
-            int hotelId = Integer.parseInt(responseHotelId.getBody());
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(
+                    urlHotelId, usuarioValidarDTO, String.class);
+
+            String bodyHotelId = responseHotelId.getBody();
+            int hotelId = Integer.parseInt(
+                    bodyHotelId != null ? bodyHotelId.replaceAll("[^0-9]", "") : "0");
 
             return comentarioService.puntuacionMediaHotel(hotelId);
 
@@ -265,7 +260,8 @@ public class ComentarioController {
 
             RestTemplate restTemplate = new RestTemplate();
             String urlValidar = URL_USUARIOS + "/usuarios/validar";
-            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO,
+                    Boolean.class);
 
             if (responseValidar.getBody() == null || !responseValidar.getBody()) {
                 throw new RuntimeException("Usuario no valido");
