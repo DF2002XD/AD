@@ -1,6 +1,7 @@
 package com.example.comentarios.entidades;
 
-import java.math.BigDecimal;
+
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
@@ -15,12 +16,12 @@ import lombok.NoArgsConstructor;
 @Document(collection = "comentarios")
 public class Comentario {
     @Id
-    private String _id;
+    private String id;
 
-    private int usuario_id;
-    private int hotel_id;
-    private int reserva_id;
-    private BigDecimal puntuacion;
+    private int usuarioId;
+    private int hotelId;
+    private int reservaId;
+    private Double puntuacion;
     private String comentario;
-    private String fechaCreacion;
+    private LocalDateTime fechaCreacion;
 }

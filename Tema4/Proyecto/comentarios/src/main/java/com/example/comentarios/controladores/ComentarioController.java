@@ -1,39 +1,284 @@
 package com.example.comentarios.controladores;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.comentarios.servicios.ComentarioService;
 import com.example.comentarios.DTO.ComentarioCrearDTO;
+import com.example.comentarios.DTO.ComentarioOutputDTO;
 import com.example.comentarios.DTO.UsuarioValidarDTO;
+import com.example.comentarios.servicios.ComentarioService;
 
 @Controller
 public class ComentarioController {
+
     @Autowired
     private ComentarioService comentarioService;
 
+    private static final String URL_USUARIOS = "http://localhost:8502";
+    private static final String URL_RESERVAS = "http://localhost:8501";
+
+    // ============================================
+    // MUTATIONS
+    // ============================================
+
     @MutationMapping
-    public String crearComentario(@Argument ComentarioCrearDTO comentarioCrearDTO) {
+    public ComentarioCrearDTO crearComentario(@Argument ComentarioCrearDTO comentarioCrearDTO) {
         try {
+            // 1. Validar usuario
             UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
             usuarioValidarDTO.setNombre(comentarioCrearDTO.getNombre());
             usuarioValidarDTO.setContrasena(comentarioCrearDTO.getContrasena());
+
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:8502/usuarios/validar";
-            ResponseEntity<Boolean> response = restTemplate.postForEntity(url, usuarioValidarDTO, Boolean.class);
-            if (response.getBody() == null || !response.getBody()) {
-                return "Usuario no válido para crear el comentario";
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido para crear el comentario");
             }
-            
-            return comentarioService.crearComentario(comentarioCrearDTO);
+
+            // 2. Obtener ID de usuario
+            String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + comentarioCrearDTO.getNombre();
+            ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
+            int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
+
+            // 3. Obtener ID de hotel (POST con credenciales en body)
+            Map<String, String> bodyHotel = new HashMap<>();
+            bodyHotel.put("nombre", comentarioCrearDTO.getNombre());
+            bodyHotel.put("contrasena", comentarioCrearDTO.getContrasena());
+
+            String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + comentarioCrearDTO.getNombreHotel();
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
+            int hotelId = Integer.parseInt(responseHotelId.getBody());
+
+            // 4. Verificar reserva
+            String urlCheck = URL_RESERVAS + "/reservas/check/" + usuarioId + "/" + hotelId + "/" + comentarioCrearDTO.getReservaId();
+            ResponseEntity<Boolean> responseCheck = restTemplate.getForEntity(urlCheck, Boolean.class);
+
+            if (responseCheck.getBody() == null || !responseCheck.getBody()) {
+                throw new RuntimeException("La reserva no existe para este usuario y hotel");
+            }
+
+            // 5. Guardar
+            comentarioService.crearComentario(
+                usuarioId,
+                hotelId,
+                comentarioCrearDTO.getReservaId(),
+                comentarioCrearDTO.getPuntuacion(),
+                comentarioCrearDTO.getComentario()
+            );
+
+            return comentarioCrearDTO;
+
         } catch (Exception e) {
-            return "Error al crear el comentario: " + e.getMessage();
+            throw new RuntimeException("Error al crear el comentario: " + e.getMessage());
         }
     }
 
+    @MutationMapping
+    public String eliminarComentarios() {
+        try {
+            return comentarioService.eliminarComentarios();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar los comentarios: " + e.getMessage());
+        }
+    }
+
+    @MutationMapping
+    public String eliminarComentarioDeUsuario(
+            @Argument String nombre,
+            @Argument String contrasena,
+            @Argument String comentarioId) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + nombre;
+            ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
+            int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
+
+            return comentarioService.eliminarComentarioDeUsuario(usuarioId, comentarioId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar el comentario: " + e.getMessage());
+        }
+    }
+
+    // ============================================
+    // QUERIES
+    // ============================================
+
+    @QueryMapping
+    public List<ComentarioOutputDTO> listarComentariosHotel(
+            @Argument String nombre,
+            @Argument String contrasena,
+            @Argument String nombreHotel) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            Map<String, String> bodyHotel = new HashMap<>();
+            bodyHotel.put("nombre", nombre);
+            bodyHotel.put("contrasena", contrasena);
+
+            String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + nombreHotel;
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
+            int hotelId = Integer.parseInt(responseHotelId.getBody());
+
+            return comentarioService.listarComentariosHotel(hotelId, nombreHotel);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al listar comentarios del hotel: " + e.getMessage());
+        }
+    }
+
+    @QueryMapping
+    public List<ComentarioOutputDTO> listarComentariosUsuario(
+            @Argument String nombre,
+            @Argument String contrasena) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + nombre;
+            ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
+            int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
+
+            return comentarioService.listarComentariosUsuario(usuarioId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al listar comentarios del usuario: " + e.getMessage());
+        }
+    }
+
+    @QueryMapping
+    public List<ComentarioOutputDTO> mostrarComentarioUsuarioReserva(
+            @Argument String nombre,
+            @Argument String contrasena,
+            @Argument int reservaId) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + nombre;
+            ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
+            int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
+
+            return comentarioService.mostrarComentarioUsuarioReserva(usuarioId, reservaId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al mostrar comentario: " + e.getMessage());
+        }
+    }
+
+    @QueryMapping
+    public double puntuacionMediaHotel(
+            @Argument String nombre,
+            @Argument String contrasena,
+            @Argument String nombreHotel) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            Map<String, String> bodyHotel = new HashMap<>();
+            bodyHotel.put("nombre", nombre);
+            bodyHotel.put("contrasena", contrasena);
+
+            String urlHotelId = URL_RESERVAS + "/reservas/hotel/id/" + nombreHotel;
+            ResponseEntity<String> responseHotelId = restTemplate.postForEntity(urlHotelId, bodyHotel, String.class);
+            int hotelId = Integer.parseInt(responseHotelId.getBody());
+
+            return comentarioService.puntuacionMediaHotel(hotelId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al calcular puntuacion media del hotel: " + e.getMessage());
+        }
+    }
+
+    @QueryMapping
+    public double puntuacionMediaUsuario(
+            @Argument String nombre,
+            @Argument String contrasena) {
+
+        try {
+            UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
+            usuarioValidarDTO.setNombre(nombre);
+            usuarioValidarDTO.setContrasena(contrasena);
+
+            RestTemplate restTemplate = new RestTemplate();
+            String urlValidar = URL_USUARIOS + "/usuarios/validar";
+            ResponseEntity<Boolean> responseValidar = restTemplate.postForEntity(urlValidar, usuarioValidarDTO, Boolean.class);
+
+            if (responseValidar.getBody() == null || !responseValidar.getBody()) {
+                throw new RuntimeException("Usuario no valido");
+            }
+
+            String urlUsuarioId = URL_USUARIOS + "/usuarios/info/nombre/" + nombre;
+            ResponseEntity<String> responseUsuarioId = restTemplate.getForEntity(urlUsuarioId, String.class);
+            int usuarioId = Integer.parseInt(responseUsuarioId.getBody());
+
+            return comentarioService.puntuacionMediaUsuario(usuarioId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al calcular puntuacion media del usuario: " + e.getMessage());
+        }
+    }
 }
