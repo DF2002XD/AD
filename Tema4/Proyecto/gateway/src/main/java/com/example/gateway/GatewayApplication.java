@@ -18,14 +18,15 @@ public class GatewayApplication {
 		return builder.routes()
 
 				.route("usuarios", r -> r.path("/usuarios/**")
-						.uri("lb://usuarios:8501"))
+						.uri("lb://usuarios"))
 
 				.route("reservas", r -> r.path("/reservas/**")
-						.uri("lb://reservas:8502"))
-
-				.route("comentarios-graphql", r -> r.path("/comentarios/graphql/**")
-						.uri("lb://comentarios:8503"))
-
+						.uri("lb://reservas"))
+				.route("comentarios", r -> r.path("/comentarios/**")
+						.filters(f -> f.rewritePath("/comentarios/(?<segment>.*)", "/${segment}"))
+						.uri("lb://comentarios"))
+				.route("comentarios", r -> r.path("/comentarios/**")
+						.uri("lb://comentarios"))
 				.build();
 	}
 
