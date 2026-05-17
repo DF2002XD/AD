@@ -64,8 +64,8 @@ public class HotelController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> eliminarHotel(@RequestBody HotelIDDTO hotelIDDTO) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarHotel(@PathVariable int id, @RequestBody HotelIDDTO hotelIDDTO) {
         try {
             UsuarioValidarDTO usuarioValidarDTO = new UsuarioValidarDTO();
             usuarioValidarDTO.setNombre(hotelIDDTO.getNombre());
@@ -76,7 +76,7 @@ public class HotelController {
             if (response.getBody() == null || !response.getBody()) {
                 return ResponseEntity.status(401).body("Usuario no válido para eliminar el hotel");
             }
-            HotelService.eliminarHotel(hotelIDDTO);
+            HotelService.eliminarHotel(id);
             return ResponseEntity.ok("Hotel eliminado correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al eliminar el hotel: " + e.getMessage());

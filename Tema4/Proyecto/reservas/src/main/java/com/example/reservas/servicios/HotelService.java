@@ -28,9 +28,9 @@ public class HotelService {
         HotelRep.save(hotelExistente);
     }
 
-    public void eliminarHotel(HotelIDDTO hotelIDDTO) {
-        Hotel hotel = HotelRep.findById(hotelIDDTO.getHotel_id())
-                .orElseThrow(() -> new RuntimeException("Hotel no encontrado con ID: " + hotelIDDTO.getHotel_id()));
+    public void eliminarHotel(int id) {
+        Hotel hotel = HotelRep.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hotel no encontrado con ID: " + id));
         HotelRep.delete(hotel);
     }
 
